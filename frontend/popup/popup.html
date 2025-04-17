@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Clippy</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="setup-required" style="display: none">
+        <h2>Setup Required</h2>
+        <p>Please complete the setup to use Clippy.</p>
+        <button id="openSetup" clas s="animation-pulse">Open Setup</button>
+      </div>
+
+      <div id="main-content">
+        <div class="header">
+          <h1>Clippy</h1>
+          <div class="user-info">
+            <span id="userId"></span>
+            <div
+              class="theme-toggle"
+              id="themeToggle"
+              title="Toggle dark/light mode"
+            >
+              <svg
+                class="light-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"
+                />
+              </svg>
+              <svg
+                class="dark-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"
+                />
+              </svg>
+            </div>
+            <button
+              id="configButton"
+              class="icon-button"
+              title="Settings"
+              style="
+                background-color: white;
+                border: none;
+                padding: 8px;
+                border-radius: 8px;
+                cursor: pointer;
+              "
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="black"
+                width="24"
+                height="24"
+              >
+                <path
+                  d="M9.25 22l-0.4-3.2c-0.329-0.118-0.65-0.261-0.95-0.44l-2.75 1.5-2.8-4.8 2.55-1.9c-0.028-0.352-0.028-0.709 0-1.06l-2.55-1.9 2.8-4.8 2.75 1.5c0.3-0.18 0.621-0.322 0.95-0.44l0.4-3.2h5.5l0.4 3.2c0.329 0.118 0.65 0.261 0.95 0.44l2.75-1.5 2.8 4.8-2.55 1.9c0.028 0.352 0.028 0.709 0 1.06l2.55 1.9-2.8 4.8-2.75-1.5c-0.3 0.18-0.621 0.322-0.95 0.44l-0.4 3.2h-5.5zM12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="retrieveButton">Retrieve Latest</button>
+          <button id="sendButton">Send Message</button>
+        </div>
+
+        <div id="retrievedContent" class="content-box">
+          <h3>Retrieved Message</h3>
+          <div id="messageContent" class="message"></div>
+          <div class="copy-actions">
+            <button id="copyButton">Copy to Clipboard</button>
+          </div>
+        </div>
+
+        <div id="sendContent" class="content-box">
+          <h3>Send Message</h3>
+          <textarea
+            id="messageInput"
+            placeholder="Type your message here..."
+            maxlength="4000"
+          ></textarea>
+          <div
+            id="longMessageLink"
+            style="
+              display: none;
+              color: #e53935;
+              font-size: 14px;
+              margin-top: 10px;
+            "
+          >
+            Message exceeds limit.<br />
+            Use our long messaging tool to share it securely using
+            <a
+              href="https://pastro.vercel.app"
+              target="_blank"
+              style="
+                color: #e53935;
+                text-decoration: underline;
+                font-weight: 500;
+              "
+            >
+              Pastro
+            </a>
+          </div>
+          <div class="send-actions">
+            <button id="cancelSendButton">Cancel</button>
+            <button id="confirmSendButton">Send</button>
+          </div>
+        </div>
+
+        <div id="status" class="status"></div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,505 @@
+:root {
+    --primary: #1e88e5;
+    --primary-dark: #1565c0;
+    --accent: #00e5ff;
+    --accent-dark: #00b8d4;
+    --bg-light: #ffffff;
+    --bg-dark: #121212;
+    --text-light: #333;
+    --text-dark: #f5f5f5;
+    --button-gradient: linear-gradient(135deg, #1e88e5, #00e5ff);
+    --button-gradient-hover: linear-gradient(135deg, #00b8d4, #1565c0);
+    --error: #ff5252;
+    --success: #4caf50;
+    --surface-light: #f1f5f9;
+    --surface-dark: #1f1f1f;
+    --transition-standard: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-light: 0 6px 20px rgba(0, 0, 0, 0.12);
+    --shadow-dark: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background-color var(--transition-standard), color var(--transition-standard);
+    min-width: 360px;
+}
+
+body.dark {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+.container {
+    width: 380px;
+    min-height: 500px;
+    background-color: var(--bg-light);
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: background-color var(--transition-standard), box-shadow var(--transition-standard);
+    border-radius: 8px;
+    position: relative;
+}
+
+body.dark .container {
+    background-color: var(--bg-dark);
+    box-shadow: var(--shadow-dark);
+}
+
+.header {
+    background: var(--button-gradient);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%);
+    background-size: 5px 5px;
+    opacity: 0.3;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(90deg, white, rgba(255, 255, 255, 0.85));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+#userId {
+    font-size: 13px;
+    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.18);
+    padding: 4px 8px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-standard);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icon-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.icon-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 18px 20px 5px 20px;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 12px 14px;
+    border: none;
+    background: var(--button-gradient);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all var(--transition-standard);
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.action-buttons button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity var(--transition-standard);
+}
+
+.action-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.action-buttons button:hover::after {
+    opacity: 1;
+}
+
+.action-buttons button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.content-box {
+    margin: 12px;
+    padding: 10px;
+    background-color: var(--surface-light);
+    border-radius: 8px;
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--transition-standard);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.content-box.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.dark .content-box {
+    background-color: var(--surface-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.content-box h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 6px;
+}
+
+.content-box h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--button-gradient);
+    border-radius: 2px;
+}
+
+.message {
+    max-height: 135px;
+    overflow-y: auto;
+    padding: 12px;
+    background-color: var(--bg-light);
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background-color var(--transition-standard);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.message::-webkit-scrollbar {
+    width: 6px;
+}
+
+.message::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.message::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.dark .message {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .message::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark .message::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+textarea {
+    width: calc(100% - 24px);
+    height: 115px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    resize: none;
+    font-size: 14px;
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: all var(--transition-standard);
+    font-family: inherit;
+    line-height: 1.5;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+}
+
+body.dark textarea {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-dark);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+body.dark textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.15);
+}
+
+.copy-actions,
+.send-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all var(--transition-standard);
+    border-radius: 6px;
+}
+
+#copyButton,
+#confirmSendButton {
+    background: var(--button-gradient);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+#copyButton::after,
+#confirmSendButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity var(--transition-standard);
+}
+
+#copyButton:hover::after,
+#confirmSendButton:hover::after {
+    opacity: 1;
+}
+
+#cancelSendButton {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-light);
+}
+
+body.dark #cancelSendButton {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-dark);
+}
+
+#copyButton:hover,
+#confirmSendButton:hover,
+#cancelSendButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#copyButton:active,
+#confirmSendButton:active,
+#cancelSendButton:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.status {
+    padding: 12px;
+    font-size: 13px;
+    text-align: center;
+    color: #555;
+    min-height: 20px;
+    background-color: var(--surface-light);
+    transition: all var(--transition-standard);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.status.error {
+    color: var(--error);
+}
+
+.status.success {
+    color: var(--success);
+}
+
+body.dark .status {
+    background-color: var(--surface-dark);
+    color: #ccc;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark .status.error {
+    color: #ff7d7d;
+}
+
+body.dark .status.success {
+    color: #81c784;
+}
+
+#setup-required {
+    text-align: center;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
+}
+
+#setup-required h2 {
+    margin-top: 0;
+    background: var(--button-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 24px;
+}
+
+#setup-required p {
+    margin-bottom: 25px;
+    opacity: 0.8;
+}
+
+#openSetup {
+    background: var(--button-gradient);
+    color: white;
+    padding: 12px 24px;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-standard);
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+#openSetup::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+    opacity: 0;
+    transition: opacity var(--transition-standard);
+}
+
+#openSetup:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#openSetup:hover::after {
+    opacity: 1;
+}
+
+#openSetup:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    position: relative;
+    cursor: pointer;
+    transition: all var(--transition-standard);
+    width: 50px;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.theme-toggle svg {
+    width: 16px;
+    padding: 5px;
+    z-index: 1;
+    fill: rgba(0, 0, 0, 0.7);
+    transition: fill var(--transition-standard);
+}
+
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    left: 1px;
+    width: 28px;
+    height: 30px;
+    transition: transform var(--transition-standard);
+}
+
+body.dark .theme-toggle::before {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateX(26px);
+}
+
+body.dark .theme-toggle svg {
+    fill: rgba(255, 255, 255, 0.85);
+}

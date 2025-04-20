@@ -31,25 +31,24 @@ const logger = winston.createLogger({
         new winston.transports.File({
             filename: 'error.log',
             level: 'error',
-            maxsize: 5242880, // 5MB
+            maxsize: 5242880,
             maxFiles: 5
         }),
         new winston.transports.File({
             filename: 'combined.log',
-            maxsize: 5242880, // 5MB
+            maxsize: 5242880,
             maxFiles: 5
         })
     ]
 });
 
 const {
-    PORT = 3000,
+    PORT,
     NODE_ENV = 'development',
     TELEGRAM_BOT_TOKEN,
     JWT_SECRET,
     ENCRYPTION_MASTER_KEY,
     ENCRYPTION_KEY_ROTATION_DAYS = 30,
-    ALLOWED_ORIGINS,
     SESSION_TOKEN_EXPIRY = '1d',
     REFRESH_TOKEN_EXPIRY = '7d'
 } = process.env;
@@ -65,12 +64,13 @@ app.use(bodyParser.json({ limit: '100kb' }));
 
 app.use(cors({
     origin: (origin, callback) => {
-        const allowedOrigins = ALLOWED_ORIGINS ? ALLOWED_ORIGINS.split(',') : [];
-        if (!origin || origin === 'null' || allowedOrigins.includes(origin) || allowedOrigins[0] === '*') {
-            callback(null, true);
+        const isChromeExtension = origin && origin.startsWith('chrome-extension://');
+        const isOtherAllowed = !origin || origin === 'null';
+        if (isChromeExtension || isOtherAllowed) {
+            return callback(null, true);
         } else {
             logger.warn(`CORS rejected origin: ${origin}`);
-            callback(new Error('CORS not allowed for this origin'));
+            return callback(new Error('CORS not allowed for this origin'));
         }
     },
     methods: ['GET', 'POST'],
@@ -668,7 +668,7 @@ function validateMessageInput(req, res, next) {
             error: `Message exceeds maximum length of ${MAX_MESSAGE_LENGTH} characters.`
         });
     }
-    req.sanitizedMessage = validator.escape(trimmedMessage);
+    req.sanitizedMessage = trimmedMessage;
     next();
 }
 
@@ -976,7 +976,7 @@ app.post('/api/messages/send', verifyToken, validateMessageInput, async (req, re
         await userDb.updateLastActivity(userId);
         try {
             logger.info(`Sending message to Telegram ID ${user.telegramId} for user ${userId}`);
-            const messageToSend = `*From Clippy Extension:*\n\n${validator.escape(sanitizedMessage)}`
+            const messageToSend = `*From Clippy Extension:*\n\n${sanitizedMessage}`
                 .replace(/([_*\[\]()~`>#+\-=|{}.!])/g, '\\$1');
             await bot.telegram.sendMessage(
                 user.telegramId,
@@ -1026,15 +1026,11 @@ app.use((err, req, res, next) => {
 
 async function startServer() {
     await initialize();
+    const port = process.env.PORT || 8080;
     const httpServer = http.createServer(app);
-    httpServer.listen(PORT, () => {
-        logger.info(`-------------------------------------------------------`);
-        logger.info(`Clippy Server listening on HTTP port ${PORT}`);
-        logger.info(`Node Environment: ${NODE_ENV}`);
-        logger.info(`Allowed Origins: ${ALLOWED_ORIGINS || '(Not Set - Check CORS config)'}`);
+    httpServer.listen(port, () => {
+        logger.info(`Clippy Server listening on HTTP port ${port}`);
         logger.info(`Server is ready to accept connections.`);
-        logger.info(`-------------------------------------------------------`);
-        logger.info('Launching Telegram bot polling...');
         bot.launch().then(() => {
             logger.info('Telegram bot started successfully.');
         }).catch(error => {

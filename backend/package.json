@@ -1,11 +1,12 @@
 {
-  "name": "clippy-backend",
+  "name": "clippy-api",
   "version": "1.0.0",
   "description": "Backend for Clippy Chrome extension with Telegram bot integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "update:gcloud": "node gcloud-update.js",
+    "build:gcloud": "node gcloud-build.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -19,8 +20,5 @@
     "telegraf": "^4.15.0",
     "validator": "^13.6.0",
     "winston": "^3.17.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
   }
 }

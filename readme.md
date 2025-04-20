@@ -1,136 +1,153 @@
-```markdown
-# Clippy Clipboard Extension
+# Clippy Clipboard — Encrypted Clipboard Sync via Telegram
 
-**Clippy Clipboard** is a browser extension that allows you to easily send and retrieve clipboard messages through a Telegram bot. It provides seamless clipboard synchronization across devices by integrating with Telegram.
-
-### Features
-- **Send and Retrieve Messages**: Easily send and retrieve clipboard contents via Telegram.
-- **Select and Send Content**: Quickly select content on any website and send it to your clipboard.
-- **Easy Configuration & Setup**: Simple to set up and start using.
-- **Secure & Encrypted**: User-specific data is encrypted and stored securely.
-- **Store User-Specific Clips**: Each user has a random clipboard ID and can store the latest 5 clips, encrypted for security.
-- **Encrypted Connection**: All data is transferred securely with encryption.
-- **Optimized Storage**: Only the latest 5 clipboard entries are stored per user and overwritten when new clips are added.
+**Clippy Clipboard** is a secure browser extension paired with a Node.js backend that enables real-time clipboard synchronization across devices using Telegram. It allows users to send and retrieve clipboard contents seamlessly, with robust encryption and privacy controls.
 
 ---
 
-## Features Overview
+## 🔐 Key Features
 
-1. **Send Clipboard**: Send the content of your clipboard to a specified Telegram user.
-2. **Retrieve Clipboard**: Retrieve and paste the most recent clipboard entry directly into your browser.
-3. **Website Integration**: Select any content on a webpage and quickly send it as a clipboard message.
-4. **Encryption**: All sensitive data (user IDs, clipboard data) is encrypted for added security.
-
----
-
-## Installation
-
-### Chrome Extension Setup
-
-1. Download or clone the repository.
-2. Open **Chrome** or **Chromium-based browser**.
-3. Go to `chrome://extensions/`.
-4. Enable **Developer mode**.
-5. Click **Load unpacked** and select the folder where the extension files are located.
-6. The extension will be installed and active in your browser.
+- **Two-Way Clipboard Sync**: Send and retrieve clipboard content via a Telegram bot.
+- **Cross-Platform Support**: Use Telegram and your browser to sync across devices.
+- **Secure & Encrypted**: All user-specific data is AES-encrypted with key rotation support.
+- **Minimal Storage**: Stores only the 5 most recent clips per user.
+- **Easy Deployment**: One-command Google Cloud Run deployment with `.env` and config support.
+- **Website Content Integration**: Send selected webpage content directly to your clipboard via context menu.
 
 ---
 
-## Backend Setup
+## 🧩 Chrome Extension Setup
 
-The backend handles the communication between the browser extension and the Telegram bot. It manages the encryption of user data and stores clipboard entries securely.
+1. Clone or download the repository.
+2. Navigate to `chrome://extensions/` in a Chromium-based browser.
+3. Enable **Developer mode**.
+4. Click **Load unpacked** and select the `frontend` folder.
+5. The extension is now active and ready to configure.
+
+---
+
+## 🚀 Backend Setup & Deployment
 
 ### Prerequisites
 
-- **Node.js** and **npm** (or **yarn**) must be installed.
-- **Telegram Bot Token**: Obtain this from [BotFather](https://core.telegram.org/bots#botfather).
-- **Encryption Master Key**: A strong key used to encrypt and decrypt clipboard data.
-- **JWT Secret**: A secret key used to generate JWT tokens.
+- Node.js and npm (or yarn)
+- Telegram bot token from [@BotFather](https://t.me/BotFather)
+- Google Cloud SDK installed and authenticated
+- `.env` file with the following environment variables:
 
-### Backend Setup Steps
-
-1. Clone or download the backend repository.
-2. Navigate to the project folder in your terminal.
-3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-4. Create a `.env` file in the root directory with the following environment variables:
-
-   ```env
-   TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
-   PORT=5001
-   ALLOWED_ORIGINS=chrome-extension://gfifelbmihejookiegiboilegkehdbfo
-   JWT_SECRET=your_jwt_secret_here
-   ENCRYPTION_MASTER_KEY=your_encryption_master_key_here
-   NODE_ENV=production
-   ENCRYPTION_KEY_ROTATION_DAYS=30
-   SESSION_TOKEN_EXPIRY=1d
-   REFRESH_TOKEN_EXPIRY=7d
-   ```
-
-   - **TELEGRAM_BOT_TOKEN**: Get your Telegram bot token from BotFather.
-   - **JWT_SECRET**: Generate a secret key (you can use Node's `crypto` module to generate one).
-   - **ENCRYPTION_MASTER_KEY**: Generate a strong encryption key (use `crypto` as well).
-   - **ALLOWED_ORIGINS**: This should match your Chrome extension’s ID (`chrome-extension://<extension-id>`).
-
-   Example of generating a JWT Secret and Encryption Key:
-
-   ```bash
-   node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-   ```
-
-5. Start the backend server:
-
-   ```bash
-   npm start
-   ```
-
-   The backend should now be running on `http://localhost:5001`.
-
----
-
-## Chrome Extension Configuration
-
-1. Open the extension’s options page by clicking on the extension icon in your browser toolbar and selecting **Options**.
-2. In the options page, configure your **Telegram User ID** (the ID of the person you want to sync your clipboard with).
-3. Optionally, configure any other settings for clipboard syncing.
-
----
-
-## Usage
-
-Once the extension and backend are set up:
-
-1. **Send Clipboard**: Click on the extension icon and select "Send Clipboard" to send the current clipboard content to your Telegram chat.
-2. **Retrieve Clipboard**: Click on the extension icon and select "Retrieve Clipboard" to get the latest clipboard content.
-3. **Select & Send Website Content**: Highlight text on any website, right-click, and choose "Send Selected Content" from the context menu.
-
----
-
-## Security Features
-
-- **Encrypted Data Storage**: All clipboard content is stored in encrypted format, ensuring that your data remains secure even if the server is compromised.
-- **Limited Storage**: Only the latest 5 clips per user are stored, with old clips being overwritten in an optimal manner.
-- **Encrypted Communication**: All interactions with the backend, including clipboard retrieval and sending, are secured with encryption.
-
----
-
-## Troubleshooting
-
-- Ensure your Telegram bot token is correct and active.
-- Double-check the allowed origins in your `.env` file.
-- Ensure the backend server is running and accessible.
-- If there are any issues with sending or receiving clips, check the browser’s developer console for any errors.
-
----
-
-## Contributing
-
-Feel free to fork the repository, submit issues, and create pull requests. Contributions are always welcome!
-
+```env
+TELEGRAM_BOT_TOKEN=<your_bot_token>
+PORT=8080
+JWT_SECRET=<your_jwt_secret>
+ENCRYPTION_MASTER_KEY=<your_encryption_key>
+NODE_ENV=production
+ENCRYPTION_KEY_ROTATION_DAYS=30
+SESSION_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_EXPIRY=7d
 ```
 
-This `README.md` file provides a comprehensive guide for setting up and using the Clippy Clipboard extension, as well as instructions for configuring the backend and ensuring secure communication.
+> 🔐 Use Node.js `crypto` to generate secure secrets:
+> ```bash
+> node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+> ```
+
+### Install Dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### Development Server
+
+To run locally:
+
+```bash
+npm start
+```
+
+---
+
+## ☁️ Google Cloud Deployment
+
+To deploy the backend to Cloud Run:
+
+### 1. Configure Deployment Settings
+
+Update the `deploy.config.json` file in the `backend` directory:
+
+```json
+{
+  "projectId": "your-google-cloud-project-id",
+  "region": "us-central1",
+  "serviceName": "clippy-api"
+}
+```
+
+Ensure your `.env` file is also present in the root of the `backend` folder.
+
+### 2. Deploy to Google Cloud
+
+```bash
+npm run build:gcloud
+```
+
+This script:
+- Parses your `.env` file
+- Builds the Docker image via `gcloud builds submit`
+- Deploys the image to Cloud Run using your config
+
+### 2. Deploy to Google Cloud
+
+```bash
+npm run update:gcloud
+```
+
+This script:
+- Parses your `.env` file
+- Builds the Docker image via `gcloud run deploy`
+- Deploys the image to Cloud Run using your config
+
+---
+
+## 🧐 Extension Configuration
+
+1. Click the Clippy icon in your browser toolbar and open the **Configuration** screen.
+2. Start the Telegram bot by messaging it on Telegram.
+3. It will return a unique **clipboard ID**.
+4. Paste this ID into the extension config and click **Save**.
+
+You're now ready to send and receive clipboard items from any device!
+
+---
+
+## 📌 Usage
+
+- **Send Clipboard**: Click the extension icon and select **Send Clipboard**.
+- **Retrieve Clipboard**: Click **Retrieve Clipboard** to fetch your latest clip.
+- **Send Selected Text**: Highlight text on any website, right-click, and choose **Send Selected Content**.
+
+---
+
+## 🛡 Security Highlights
+
+- All user data (user ID, clipboard text) is AES-encrypted using a rotating master key.
+- Tokens are secured via JWT with custom expiry options.
+- Backend only stores the latest 5 clips per user to minimize footprint and exposure.
+- Cloud Run instances are stateless and isolated.
+
+---
+
+## 🧪 Troubleshooting
+
+- **Bot not responding?** Verify your Telegram bot token is correct and the bot is started.
+- **Invalid config?** Double-check your `.env` and Cloud project values.
+- **Extension issues?** Review browser console logs for helpful errors.
+
+---
+
+## 🤝 Contributing
+
+Clippy is open to contributions! Feel free to:
+- Fork the repository
+- Open issues for bugs or enhancements
+- Submit pull requests
